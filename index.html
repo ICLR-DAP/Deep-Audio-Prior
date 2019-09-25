@@ -221,7 +221,11 @@ including non-negative matrix factorization (NMF), robust principal component an
 
     <hr>
     <h2>Figure 4: Comparison with Deep Network Methods</h2>
-    <p>Compared with models that used deep network (DNP) and were trained on large dataset (SEGAN), DAP can produce comparable and sometimes more intelligible denoising results. </p>
+    <p>Comparison with other deep network models. DNP does not require training dataset and DAP achieve higher denoising quality. 
+   As for supervised models, for example SEGAN, that are trained on large dataset, although they usually work well on seen noises, it is hard to generalize to unseen noise.
+   Here the speech is mixed with a noise that was not in the training set.
+   While SEGAN did not remove the novel noise, DAP can better remove noises at the price of lower speech quality in some segments.
+   Please listen to the sounds to appreciate the difference. </p>
 
 
     
