@@ -1,1 +1,550 @@
-hello world
+<HTML>
+    <HEAD> <TITLE>Deep Audio Prior</TITLE> 
+
+    <!-- For Math Latex Display from https://www.mathjax.org/ -->
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</HEAD>
+
+    <BODY>
+    
+    <h1>Deep Audio Prior</h1>
+    <h2>Anonymous ICLR 2020 Submission </h2>
+    Webpage sources are here: <a href="https://github.com/ICLR-DAP/Deep-Audio-Prior">https://github.com/ICLR-DAP/Deep-Audio-Prior</a>
+    <br>
+    </p>
+    <h2>Figure 1: Overview</h2>
+    <p>We introduce Deep Audio Prior (DAP) to address sound source separation problem <b>without relying on any external training data</b>.</p>
+    <IMG src="figures/framework_fig.jpg" width="720">
+
+    <hr>
+    <h2>Figure 2: Synthetic Examples</h2>
+    <p> Two single-tone sources (top two rows) and two cosine-tone sources (bottom two rows). 
+  DAP achieves perfect separation on both input mixtures</p>
+
+    
+<table>
+    <style> table, th, td {border: 1px solid black;} </style>
+    <tr>
+        <th>Input Mixed Audio</th>
+        <th>Predicted $S_1$ and $S_2$</th>
+        <th>Predicted $M_1$ and $M_2$</th>
+        <th>Final $S_1^*$ and $S_2^*$</th>
+    </tr>
+    <tr>
+        <td rowspan="2">
+            <img src="figures/synthetic/mix1.png" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/synthetic/mix1.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/synthetic/s1_1.png" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/synthetic/s1_1.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/synthetic/m1_1.png" style="max-height:200px;max-width:200px;">
+        </td>
+        <td>
+            <img src="figures/synthetic/s_star_1_1.png" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/synthetic/s_star_1_1.mp3"></audio>
+        </td>
+    </tr>
+    <tr> 
+        <td>
+            <img src="figures/synthetic/s1_2.png" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/synthetic/s1_2.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/synthetic/m1_2.png" style="max-height:200px;max-width:200px;">
+        </td>
+        <td>
+            <img src="figures/synthetic/s_star_1_2.png" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/synthetic/s_star_1_2.mp3"></audio>
+        </td>
+    </tr>
+    <tr>
+        <td rowspan="2">
+            <img src="figures/synthetic/mix2.png" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/synthetic/mix2.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/synthetic/s2_1.png" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/synthetic/s2_1.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/synthetic/m2_1.png" style="max-height:200px;max-width:200px;">
+        </td>
+        <td>
+            <img src="figures/synthetic/s_star_2_1.png" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/synthetic/s_star_2_1.mp3"></audio>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <img src="figures/synthetic/s2_2.png" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/synthetic/s2_2.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/synthetic/m2_2.png" style="max-height:200px;max-width:200px;">
+        </td>
+        <td>
+            <img src="figures/synthetic/s_star_2_2.png" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/synthetic/s_star_2_2.mp3"></audio>
+        </td>
+    </tr>
+</table>
+
+
+
+    <hr>
+    <h2>Figure 3: Audio comparison with other blind source separation (BSS) methods.</h2>
+    <p> Audio comparison on Universal-150 benchmark. 
+  Qualitatively, DAP significantly outperforms all the other blind separation methods, 
+including non-negative matrix factorization (NMF), robust principal component analysis (RPCA), and kernel additive modelling.</p>
+
+<table>
+    <style> table, th, td {border: 1px solid black;} </style>
+    <tr>
+        <th>Input Mixed Audio</th>
+        <th>NMF</th>
+        <th>RPCA</th>
+        <th>KAM</th>
+        <th>Proposed method: DAP</th>
+        <th>Ground Truth</th>
+    </tr>
+    <tr>
+        <td rowspan="2">
+            <img src="figures/real_0/mix.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_0/mix.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_0/nmf_clap.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_0/nmf_clap.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_0/rpca_fire.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_0/rpca_fire.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_0/kam_clap.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_0/kam_clap.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_0/dap_clap.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_0/dap_clap.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_0/gt_clap.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_0/gt_clap.mp3"></audio>
+        </td>
+    </tr>
+    <tr> 
+        <td>
+            <img src="figures/real_0/nmf_fire.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_0/nmf_fire.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_0/rpca_clap.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_0/rpca_clap.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_0/kam_fire.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_0/kam_fire.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_0/dap_fire.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_0/dap_fire.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_0/gt_fire.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_0/gt_fire.mp3"></audio>
+        </td>
+    </tr>
+    <tr>
+        <td rowspan="2">
+            <img src="figures/real_1/mix.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_1/mix_crop.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_1/nmf_basketball.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_1/nmf_basketball_crop.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_1/rpca_basketball.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_1/rpca_basketball_crop.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_1/kam_basketball.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_1/kam_basketball_crop.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_1/dap_basketball.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_1/dap_basketball_crop.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_1/gt_basketball.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_1/gt_basketball_crop.mp3"></audio>
+        </td>
+    </tr>
+    <tr>
+        <td>    
+            <img src="figures/real_1/nmf_guitar.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_1/nmf_guitar_crop.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_1/rpca_guitar.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_1/rpca_guitar_crop.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_1/kam_guitar.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_1/kam_guitar_crop.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_1/dap_guitar.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_1/dap_guitar_crop.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/real_1/gt_guitar.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/real_1/gt_guitar_crop.mp3"></audio>
+        </td>
+    </tr>
+</table>
+
+
+
+    <hr>
+    <h2>Figure 4: Comparison with Deep Network Methods</h2>
+    <p>Compared with models that used deep network (DNP) and were trained on large dataset (SEGAN), DAP can produce comparable and sometimes more intelligible denoising results. </p>
+
+
+    
+<table>
+    <style> table, th, td {border: 1px solid black;} </style>
+    <tr>
+        <th>Input Noisy Speech</th>
+        <th>DNP</th>
+        <th>SEGAN</th>
+        <th>DAP</th>
+    </tr>
+    <tr>
+        <td>
+            <img src="figures/se/se_noisy.jpg" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/se/se_noisy_crop.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/se/se_dnp.jpg" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/se/se_dnp_crop.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/se/se_segan.jpg" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/se/se_segan_crop.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/se/se_dap.jpg" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/se/se_dap_crop.mp3"></audio>
+        </td>
+    </tr>
+</table>
+
+
+
+
+    <hr>
+    <h2>Figure 5: Interactive Sound Editing</h2>
+    <p>Given a sound mixture, our DAP model can predict separated sounds and the corresponding mask activation maps. Users can simply draw boxes to interact with our DAP model to tell where to deactivate or activate the predicted masks for refining predicted sounds. As shown, a user deactivate a region in the predicted mask for a separated sound, and then we obtain better results with the refined mask.</p>
+
+
+
+
+    
+<table>
+    <style> table, th, td {border: 1px solid black;} </style>
+    <tr>
+        <th>Input Mixture</th>
+        <th>Initial Output $S_1$ / $M_1$</th>
+        <th>Intuitive User Input</th>
+        <th>Refined Output $S_1$ / $M_1$</th>
+    </tr>
+    <tr>
+        <td rowspan="2">
+            <img src="figures/interaction/mix.png" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/interaction/mix.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/interaction/s1.png" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/interaction/s1.mp3"></audio>
+        </td>
+        <td rowspan="2">
+            <img src="figures/interaction/mask_label.png" style="max-height:200px;max-width:200px;"><br>
+        </td>
+        <td>
+            <img src="figures/interaction/s1_refine.png" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/interaction/s1_refine.mp3"></audio>
+        </td>
+    </tr>
+    <tr> 
+        <td>
+            <img src="figures/interaction/m1.png" style="max-height:200px;max-width:200px;">
+        </td>
+        <td>
+            <img src="figures/interaction/m1_refine.png" style="max-height:200px;max-width:200px;">
+        </td>
+    </tr>
+</table>
+
+    <hr>
+    <h2>Figure 6: Audio Texture Synthesis</h2>
+    <p> Audio texture synthesis via latent space editing.
+From a 3-second input audio, we can interpolate (in green) and extrapolate (in orange) the latent input noise to synthesize a seamless 12-second audio.</p>
+
+    
+    
+<table>
+    <style> table, th, td {border: 1px solid black;} </style>
+    <tr>
+        <th>Input 3-second Audio Texture</th>
+        <th>Output 12-second Synthesized Results</th>
+    </tr>
+    <tr>
+        <td>
+            <img src="figures/texture/texture_input.png" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/texture/sound_input.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/texture/texture_output.png" style="max-height:200px;max-width:800px;"><br>
+            <audio controls><source src="audio/texture/sound_synthesized.mp3"></audio>
+        </td>
+
+    </tr>
+</table>
+
+
+
+
+    <hr>
+    <h2>Figure 7: Audio Watermark Removal / Co-Separation</h2>
+    <p> DAP can also be applied to automatically remove audio watermark. 
+Top row shows three audios A, B, and C, all mixed with watermark.
+Given these 3 mixtures, DAP can seperate each individual sound source out. 
+Note that DAP is only trained on these 3 input audios. </p>
+
+<h3>Input:</h3>
+<table>
+    <style> table, th, td {border: 1px solid black;} </style>
+    <tr>
+        <th>A + Watermark</th>
+        <th>B + Watermark</th>
+        <th>C + Watermark</th>
+        <th></th>
+    </tr>
+    <tr>
+        <td>
+            <img src="figures/co_sep/sounds_mix1.jpg" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/co_sep/mixture1.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/co_sep/sounds_mix2.jpg" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/co_sep/mixture2.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/co_sep/sounds_mix3.jpg" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/co_sep/mixture3.mp3"></audio>
+        </td>
+        <td>
+        </td>
+    </tr>
+</table>
+<h3>Output:</h3>
+<table>
+    <style> table, th, td {border: 1px solid black;} </style>
+    <tr>
+        <th>A</th>
+        <th>B</th>
+        <th>C</th>
+        <th>Watermark</th>
+    </tr>
+    <tr>
+        <td>
+            <img src="figures/co_sep/spec2.jpg" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/co_sep/s2.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/co_sep/spec3.jpg" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/co_sep/s3.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/co_sep/spec4.jpg" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/co_sep/s4.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/co_sep/spec1.jpg" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/co_sep/s1.mp3"></audio>
+        </td>
+    </tr>
+</table>
+
+
+
+
+    
+
+    <hr>
+    <h2>Figure 8: Ablation study on noise design. </h2>
+    <p> From left to right, spectrograms are from (a) input mixture (b) without temporal noise (w/o TN) (c) without dynamic noise (w/o DN) (d) without abrupt change in dynamic noise (w/o AC) (e) our full DAP model (f) ground truth.  </p>
+
+
+
+
+    
+<table>
+    <style> table, th, td {border: 1px solid black;} </style>
+    <tr>
+        <th>(a) Input</th>
+        <th>(b) w/o TN</th>
+        <th>(c) w/o DN</th>
+        <th>(d) w/o AC</th>
+        <th>(e) DAP</th>
+        <th>(f) Ground Turth</th>
+    </tr>
+    <tr>
+        <td rowspan="2">
+            <img src="figures/ablation/mix_spec.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/ablation/mix.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/ablation/wo_tn_bas.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/ablation/wo_tn_bas.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/ablation/wo_dn_bas.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/ablation/wo_dn_bas.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/ablation/wo_ndrop_bas.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/ablation/wo_ndrop_bas.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/ablation/dap_spec_bas.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/ablation/dap_bas.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/ablation/gt_bas.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/ablation/gt_bas.mp3"></audio>
+        </td>
+    </tr>
+    <tr> 
+        <td>
+            <img src="figures/ablation/wo_tn_violin.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/ablation/wo_tn_violin.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/ablation/wo_dn_violin.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/ablation/wo_dn_violin.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/ablation/wo_ndrop_violin.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/ablation/wo_ndrop_violin.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/ablation/dap_spec_violin.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/ablation/dap_violin.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/ablation/gt_violin.jpg" style="max-height:200px;max-width:200px;">
+            <audio controls><source src="audio/ablation/gt_violin.mp3"></audio>
+        </td>
+    </tr>
+</table>
+
+
+
+    <hr>
+    <h2>Figure 9: Ablation study on mask design</h2>
+    <p> From left to right, spectrograms and masks are from models without 1D mask (w/o 1D), without nonzero mask loss (w/o NZ), and with both 1D mask and the loss (DAP). </p>
+
+
+
+
+    
+
+    
+<table>
+    <style> table, th, td {border: 1px solid black;} </style>
+    <tr>
+        <th>(a) w/o 1D </th>
+        <th>masks</th>
+        <th>(b) w/o NZ</th>
+        <th>masks</th>
+        <th>(c) DAP</th>
+        <th>masks</th>
+    </tr>
+    <tr>
+        <td>
+            <img src="figures/ablation/wo_1d_bas.jpg" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/ablation/wo_1d_bas.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/ablation/wo_1d_bas_mask.jpg" style="max-height:200px;max-width:200px;"><br>
+        </td>
+        <td>
+            <img src="figures/ablation/wo_nz_bas.jpg" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/ablation/wo_nz_bas.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/ablation/wo_nz_bas_mask.jpg" style="max-height:200px;max-width:200px;"><br>
+        </td>
+        <td>
+            <img src="figures/ablation/dap_spec_bas.jpg" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/ablation/dap_bas.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/ablation/dap_bas_mask.jpg" style="max-height:200px;max-width:200px;"><br>
+        </td>
+    </tr>
+    <tr> 
+        <td>
+            <img src="figures/ablation/wo_1d_violin.jpg" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/ablation/wo_1d_violin.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/ablation/wo_1d_violin_mask.jpg" style="max-height:200px;max-width:200px;"><br>
+        </td>
+        <td>
+            <img src="figures/ablation/wo_nz_violin.jpg" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/ablation/wo_nz_violin.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/ablation/wo_nz_violin_mask.jpg" style="max-height:200px;max-width:200px;"><br>
+        </td>
+        <td>
+            <img src="figures/ablation/dap_spec_violin.jpg" style="max-height:200px;max-width:200px;"><br>
+            <audio controls><source src="audio/ablation/dap_violin.mp3"></audio>
+        </td>
+        <td>
+            <img src="figures/ablation/dap_violin_mask.jpg" style="max-height:200px;max-width:200px;"><br>
+        </td>
+    </tr>
+</table>
+
+
+<br>
+<br>
+<br>
+
+Our Universal-150 Separation Benchmark is in <a href="https://github.com/ICLR-DAP/Deep-Audio-Prior/tree/master/Universal-150-Benchmark">https://github.com/ICLR-DAP/Deep-Audio-Prior/tree/master/Universal-150-Benchmark</a>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+</BODY>
+</HTML>
